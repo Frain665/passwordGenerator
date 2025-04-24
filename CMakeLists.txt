@@ -10,5 +10,5 @@ include_directories(include)
 add_executable(passwordGenerator 
 src/main.cpp
 src/Engine.cpp
-src/ApplicationMenu.cpp
+src/InterfaceElements.cpp
 )
