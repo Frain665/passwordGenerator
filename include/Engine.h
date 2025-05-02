@@ -4,11 +4,11 @@
 #include <iostream>
 #include <string>
 
-#include <SFMl/Graphics/RenderWindow.hpp>
-#include <SFML/Graphics/RenderTarget.hpp>
-#include <SFML/Window/Event.hpp>
+#include "SFML/Graphics/RenderWindow.hpp"
+#include "SFML/Graphics/RenderTarget.hpp"
+#include "SFML/Window/Event.hpp"
 
-#include "ApplicationMenu.h"
+#include "InterfaceElements.h"
 
 constexpr const int WINDOW_HEIGHT = 600;
 constexpr const int WINDOW_WIDTH = 800;

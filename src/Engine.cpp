@@ -2,7 +2,7 @@
 
 void Engine::initVariables()
 {
-	this->_isOpen = false;
+	this->_isOpen = true;
 
 	this->_windowTitle = "Password Generator";
 }
