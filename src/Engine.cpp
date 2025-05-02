@@ -9,18 +9,14 @@ void Engine::initVariables()
 
 void Engine::initWindow()
 {
-	this->_settings.antialiasingLevel = 4;
-	this->_videoMode.height = WINDOW_HEIGHT;
-	this->_videoMode.width = WINDOW_WIDTH;
-	this->_window = std::make_unique<sf::RenderWindow>(this->_videoMode,
-		this->_windowTitle, sf::Style::Close | sf::Style::Titlebar, this->_settings);
+	this->_window = std::make_unique<sf::RenderWindow>(sf::VideoMode(800, 600),
+		this->_windowTitle, sf::Style::Close | sf::Style::Titlebar);
 	this->_window->setFramerateLimit(60);
 }
 
 void Engine::update()
 {
 	this->handleInput();
-
 }
 
 void Engine::render()
@@ -44,8 +40,10 @@ void Engine::handleInput()
 		break;
 	case sf::Event::KeyPressed:
 		if (event.key.code == sf::Keyboard::Escape)
-			this->_window->close();
-		this->_isOpen = false;
+		{
+			this->_window->close(); 
+			this->_isOpen = false;
+		}
 		break;
 	default:
 		break;

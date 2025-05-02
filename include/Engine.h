@@ -2,16 +2,14 @@
 #define ENGINE_HPP
 
 #include <iostream>
+#include <memory>
 #include <string>
 
-#include "SFML/Graphics/RenderWindow.hpp"
-#include "SFML/Graphics/RenderTarget.hpp"
-#include "SFML/Window/Event.hpp"
+#include <SFML/Graphics/RenderWindow.hpp>
+#include <SFML/Graphics/RenderTarget.hpp>
+#include <SFML/Window/Event.hpp>
 
 #include "InterfaceElements.h"
-
-constexpr const int WINDOW_HEIGHT = 600;
-constexpr const int WINDOW_WIDTH = 800;
 
 class Engine
 {
@@ -27,7 +25,6 @@ private:
 	std::unique_ptr<sf::RenderWindow> _window;
 	
 	sf::VideoMode _videoMode;
-	sf::ContextSettings _settings;
 
 	std::string _windowTitle;
 
