@@ -2,16 +2,23 @@
 
 void Engine::initVariables()
 {
-	this->_isOpen = true;
-
-	this->_windowTitle = "Password Generator";
+	_windowTitle = "Password Generator";
+	_window = nullptr;
+	_event = {};
+	
 }
 
 void Engine::initWindow()
 {
-	this->_window = std::make_unique<sf::RenderWindow>(sf::VideoMode(800, 600),
-		this->_windowTitle, sf::Style::Close | sf::Style::Titlebar);
-	this->_window->setFramerateLimit(60);
+	_window = std::make_unique<sf::RenderWindow>(sf::VideoMode(800, 600),
+		_windowTitle, sf::Style::Close | sf::Style::Titlebar);
+	_window->setFramerateLimit(60);
+}
+
+void Engine::init()
+{
+	initVariables();
+	initWindow();
 }
 
 void Engine::update()
@@ -21,48 +28,47 @@ void Engine::update()
 
 void Engine::render()
 {
-	this->_window->clear();
+	_window->clear();
 
-	//this->_window->draw(/*some code*/);
-
-	this->_window->display();
+	_window->display();
 }
 
 void Engine::handleInput()
 {
-	sf::Event event;
 
-	switch (event.type)
+	while (_window->pollEvent(_event))
 	{
-	case sf::Event::Closed:
-		this->_window->close();
-		this->_isOpen = false;
-		break;
-	case sf::Event::KeyPressed:
-		if (event.key.code == sf::Keyboard::Escape)
+		switch (_event.type)
 		{
-			this->_window->close(); 
-			this->_isOpen = false;
+		case sf::Event::Closed:
+			_window->close();
+			break;
+		case sf::Event::KeyPressed:
+			if (_event.key.code == sf::Keyboard::Escape)
+			{
+				_window->close();
+			}
+			break;
+		default:
+			break;
 		}
-		break;
-	default:
-		break;
 	}
 }
 
 void Engine::run()
 {
-	while (this->_isOpen)
-	{
-		this->update();
-		this->render();
-	}
-}
+	init();
 
-Engine::Engine()
-{
-	this->initVariables();
-	this->initWindow();
+	if (!_window)
+	{
+		throw std::runtime_error("Window is not initialized!");
+	}
+
+	while (_window->isOpen())
+	{
+		update();
+		render();
+	}
 }
 
 Engine& Engine::getInstance()
