@@ -37,6 +37,8 @@ Thumbs.db
 *.class
 *.jar
 
+lib/
+
 # ========== macOS ========== #
 .DS_Store
 __MACOSX/

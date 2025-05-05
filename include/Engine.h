@@ -7,7 +7,9 @@
 
 #include <SFML/Graphics/RenderWindow.hpp>
 #include <SFML/Graphics/RenderTarget.hpp>
-#include <SFML/Window/Event.hpp>
+//#include <SFML/Window/Event.hpp>
+
+#include <SFML/Window.hpp>
 
 #include "InterfaceElements.h"
 
