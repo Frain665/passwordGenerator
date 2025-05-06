@@ -16,7 +16,12 @@ find_package(SFML 2.6.0 EXACT COMPONENTS system window graphics REQUIRED)
 message(STATUS "SFML found: ${SFML_VERSION}")
 
 file(GLOB SOURCES src/*.cpp)
-add_executable(${PROJECT_NAME} ${SOURCES})
+file(GLOB HEADERS include/*.h)
+
+add_executable(${PROJECT_NAME} ${SOURCES} ${HEADERS})
+
+source_group("Source Files" FILES ${SOURCES})
+source_group("Header Files" FILES ${HEADERS})
 
 target_include_directories(${PROJECT_NAME} PRIVATE "include")
 
