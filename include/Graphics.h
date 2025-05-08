@@ -11,8 +11,9 @@
 #include <SFML/Graphics/Color.hpp>
 #include <SFML/Graphics/Sprite.hpp>
 #include <SFML/Graphics/Texture.hpp>
-
-//#include <SFML/System/Vector2.hpp>
+#include <SFML/Graphics/RectangleShape.hpp>
+#include <SFML/System/Vector2.hpp>
+#include <SFML/Window/Event.hpp>
 
 //A config through which you 
 // can customize 
@@ -68,15 +69,43 @@ namespace graphics
 
 	class TextField
 	{
+	/*
+				*Improvements for the future:
+			1. Add placeholder text
+			
+			2. Implement text selection
+			
+			3. Add multiline input support
+			
+			4. Optimize event handling
+	*/
+
 	private:
+		sf::Font _font;
+
 		sf::Text _text;
-		sf::Texture _background;
+		sf::RectangleShape _background;
+
+		sf::Color _activeColor;
+		sf::Color _inactiveColor;
+
 		bool _isActive;
+		std::string _inputString;
+		unsigned int _characterSize;
+		unsigned int _maxLength;
+
 
 	public:
 		TextField();
 
+		const std::string& getText() const;
+
+		void setCharacterSize(unsigned int characterSize);
+		void setSize(float width, float height);
+		void setMaxLength(unsigned int length);
 		void setText(const std::string& text);
+		void setPosition(sf::Vector2f position);
+
 		void handleEvent(const sf::Event& event);
 		void render(sf::RenderTarget& target) const;
 
