@@ -13,12 +13,34 @@ void Engine::initWindow()
 	_window = std::make_unique<sf::RenderWindow>(sf::VideoMode(800, 600),
 		_windowTitle, sf::Style::Close | sf::Style::Titlebar);
 	_window->setFramerateLimit(60);
+
+	if (!_window)
+	{
+		throw WindowNotInitializedException("Game::initWindow() -> ");
+	}
 }
 
 void Engine::init()
 {
 	initVariables();
-	initWindow();
+
+	try
+	{
+		initWindow();
+	}
+	catch (const WindowNotInitializedException& exception)
+	{
+		std::cerr << "CRITICAL: " << exception.what() << std::endl;
+		exit(EXIT_FAILURE);
+	}
+	catch (const FileLoadException& exception)
+	{
+		std::cerr << "RESOURCE ERROR: " << exception.what() << std::endl;
+	}
+	catch (const std::exception& exception)
+	{
+		std::cerr << "UNKNOWN ERROR: " << exception.what() << std::endl;
+	}
 }
 
 void Engine::update()
@@ -58,11 +80,6 @@ void Engine::handleInput()
 void Engine::run()
 {
 	init();
-
-	if (!_window)
-	{
-		throw std::runtime_error("Window is not initialized!");
-	}
 
 	while (_window->isOpen())
 	{

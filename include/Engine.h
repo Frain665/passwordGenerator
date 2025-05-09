@@ -13,6 +13,7 @@
 #include <SFML/Window/Event.hpp>
 
 #include "Graphics.h"
+#include "exceptions.h"
 
 class Engine
 {

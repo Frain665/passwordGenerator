@@ -48,6 +48,27 @@ namespace graphics
 {
 	class Button
 	{
+		/*
+			*Improvements for the future:
+		1. audio processing
+
+		2. animations
+
+		3. Methods for resizing buttons
+
+		4. Integration with the event system
+
+		5. Performance optimization
+
+		6. Multiplatform support
+
+		7. Adding methods to get the current button state
+
+		8. Checking for the necessary resources before creating the button
+
+		9. ...
+*/
+
 	private:
 		sf::RectangleShape _shape;
 		ButtonConfig _config;
@@ -60,7 +81,7 @@ namespace graphics
 		bool isClicked(const sf::Event& event) const;
 		void setPosition(const sf::Vector2f& position);
 		void setEnabled(bool enabled);
-		void render(sf::RenderTarget& target);
+		void render(sf::RenderTarget& target) const;
 		void update(const sf::RenderWindow& window);
 	};
 

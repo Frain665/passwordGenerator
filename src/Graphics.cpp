@@ -60,7 +60,7 @@ void graphics::TextField::handleEvent(const sf::Event& event)
 {
 	if (event.type == sf::Event::MouseButtonPressed)
 	{
-		sf::Vector2f mousePos = sf::Vector2f(event.mouseButton.x, event.mouseButton.y);
+		auto mousePos = sf::Vector2f(event.mouseButton.x, event.mouseButton.y);
 		_isActive = _background.getGlobalBounds().contains(mousePos);
 
 		_text.setFillColor(_isActive ? _activeColor : _inactiveColor);
@@ -127,7 +127,7 @@ void graphics::Button::setEnabled(bool enabled)
 	_state = enabled ? ButtonState::NORMAL : ButtonState::DISABLED;
 }
 
-void graphics::Button::render(sf::RenderTarget& target)
+void graphics::Button::render(sf::RenderTarget& target) const
 {
 	target.draw(_shape);
 	target.draw(_config.title);
