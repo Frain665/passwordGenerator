@@ -91,3 +91,94 @@ void graphics::TextField::render(sf::RenderTarget& target) const
 	target.draw(_background);
 	target.draw(_text);
 }
+
+graphics::Button::Button(const ButtonConfig& config)
+	:_config(config)
+{
+	_shape.setSize(_config.buttonSize);
+	_shape.setPosition(_config.buttonPosition);
+	_shape.setFillColor(_config.normalColor);
+	_shape.setOutlineThickness(_config.outlineThickness);
+	_shape.setOutlineColor(_config.outlineColor);
+
+	_config.title.setPosition(
+		_config.buttonPosition.x + _config.buttonSize.x / 2 - _config.title.getGlobalBounds().width / 2,
+		_config.buttonPosition.y + _config.buttonSize.y / 2 - _config.title.getGlobalBounds().height / 2
+	);
+}
+
+bool graphics::Button::isClicked(const sf::Event& event) const
+{
+	return false;
+}
+
+void graphics::Button::setPosition(const sf::Vector2f& position)
+{
+	_config.buttonPosition = position;
+	_shape.setPosition(position);
+	_config.title.setPosition(
+		position.x + _shape.getSize().x / 2 - _config.title.getGlobalBounds().width / 2,
+		position.y + _shape.getSize().y / 2 - _config.title.getGlobalBounds().height / 2
+	);
+}
+
+void graphics::Button::setEnabled(bool enabled)
+{
+	_state = enabled ? ButtonState::NORMAL : ButtonState::DISABLED;
+}
+
+void graphics::Button::render(sf::RenderTarget& target)
+{
+	target.draw(_shape);
+	target.draw(_config.title);
+}
+
+void graphics::Button::update(const sf::RenderWindow& window)
+{
+	if (_state == ButtonState::DISABLED) return;
+
+	auto mousePos = sf::Mouse::getPosition(window);
+	bool contains = _shape.getGlobalBounds().contains(
+		static_cast<float>(mousePos.x),
+		static_cast<float>(mousePos.y)
+	);
+
+	if (contains)
+	{
+		if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
+		{
+			_state = ButtonState::PRESSED;
+			_wasPressed = true;
+		}
+		else
+		{
+			_state = _wasPressed ? ButtonState::PRESSED : ButtonState::HOVERED;
+		}
+
+		if (!sf::Mouse::isButtonPressed(sf::Mouse::Left) && _wasPressed)
+		{
+			if (_config.onClickAction) _config.onClickAction();
+			_wasPressed = false;
+		}
+	}
+	else
+	{
+		_state = ButtonState::NORMAL;
+		_wasPressed = false;
+	}
+
+	switch (_state)
+	{
+	case ButtonState::HOVERED:
+		_shape.setFillColor(_config.hoverColor);
+		break;
+	case ButtonState::PRESSED:
+		_shape.setFillColor(_config.pressedColor);
+		break;
+	case ButtonState::DISABLED:
+		_shape.setFillColor(_config.disabledColor);
+		break;
+	default:
+		_shape.setFillColor(_config.normalColor);
+	}
+}

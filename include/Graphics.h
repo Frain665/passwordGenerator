@@ -20,16 +20,13 @@
 // the buttons 
 // in the interface
 
-enum class ButtonState { NONE, NORMAL, HOVERED, PRESSED, DISABLED };
+enum class ButtonState {NORMAL, HOVERED, PRESSED, DISABLED };
 
 struct ButtonConfig
 {
 	sf::Text title;
 
-	sf::Vector2f size;
-	sf::Vector2f position;
-
-	sf::Color outLineColor;
+	sf::Color outlineColor;
 	sf::Color normalColor;
 	sf::Color hoverColor;
 	sf::Color pressedColor;
@@ -40,10 +37,10 @@ struct ButtonConfig
 
 	std::function<void()> onClickAction;
 
-	unsigned int outlineThickness;
-	unsigned int buttonSize;
+	float outlineThickness;
 
-	float buttonPosition;
+	sf::Vector2f buttonSize;
+	sf::Vector2f buttonPosition;
 
 };
 
@@ -52,17 +49,17 @@ namespace graphics
 	class Button
 	{
 	private:
-		void initVariables();
-
 		sf::RectangleShape _shape;
 		ButtonConfig _config;
-		ButtonState _state;
+		ButtonState _state = ButtonState::NORMAL;
+		bool _wasPressed = false;
 
 	public:
-		explicit Button();
+		explicit Button(const ButtonConfig& config);
 
 		bool isClicked(const sf::Event& event) const;
 		void setPosition(const sf::Vector2f& position);
+		void setEnabled(bool enabled);
 		void render(sf::RenderTarget& target);
 		void update(const sf::RenderWindow& window);
 	};

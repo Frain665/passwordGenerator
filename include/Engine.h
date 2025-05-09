@@ -26,7 +26,7 @@ private:
 	Engine(const Engine&) = delete;
 
 	std::unique_ptr<sf::RenderWindow> _window;
-	sf::Event _event;
+	sf::Event _event{};
 	sf::VideoMode _videoMode;
 	std::string _windowTitle;
 
