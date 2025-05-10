@@ -17,11 +17,13 @@ message(STATUS "SFML found: ${SFML_VERSION}")
 
 file(GLOB SOURCES src/*.cpp)
 file(GLOB HEADERS include/*.h)
+file(GLOB BUTTONS include/**/*.h)
 
-add_executable(${PROJECT_NAME} ${SOURCES} ${HEADERS})
+add_executable(${PROJECT_NAME} ${SOURCES} ${HEADERS} ${BUTTONS})
 
 source_group("Source Files" FILES ${SOURCES})
 source_group("Header Files" FILES ${HEADERS})
+source_group("Buttons" FILES ${BUTTONS})
 
 target_include_directories(${PROJECT_NAME} PRIVATE "include")
 
