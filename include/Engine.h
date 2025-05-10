@@ -26,6 +26,8 @@ private:
 	Engine operator=(const Engine&) = delete;
 	Engine(const Engine&) = delete;
 
+	ButtonConfig _defaultConfig;
+
 	std::unique_ptr<sf::RenderWindow> _window;
 	sf::Event _event{};
 	sf::VideoMode _videoMode;
