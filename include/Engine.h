@@ -44,6 +44,8 @@ private:
 
 	std::vector<std::unique_ptr<graphics::Button>> _buttons;
 
+	std::shared_ptr<graphics::TextField> _textField;
+
 public:
 	static Engine& getInstance();
 

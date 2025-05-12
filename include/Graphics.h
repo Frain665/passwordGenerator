@@ -102,6 +102,7 @@ namespace graphics
 	*/
 
 	private:
+		sf::Clock _keyRepeatClock;
 		sf::Font _font;
 
 		sf::Text _text;

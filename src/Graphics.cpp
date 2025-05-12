@@ -8,9 +8,9 @@ graphics::TextField::TextField()
 	_inactiveColor(sf::Color(180, 180, 180)),
 	_maxLength(20)
 {
-	if (!_font.loadFromFile("resources/fonts/defaultFont.otf"))
+	if (!_font.loadFromFile(RESOURCES_DIR "fonts/defaultFont.otf"))
 	{
-		throw FontException("resources/fonts/defaultFont.otf");
+		throw FontException(RESOURCES_DIR "fonts/defaultFont.otf");
 	}
 
 	_text.setFont(_font);
@@ -66,6 +66,11 @@ void graphics::TextField::handleEvent(const sf::Event& event)
 
 		_text.setFillColor(_isActive ? _activeColor : _inactiveColor);
 		_background.setOutlineColor(_isActive ? _activeColor : _inactiveColor);
+
+		if (_isActive)
+		{
+			_keyRepeatClock.restart();
+		}
 	}
 
 	if (_isActive && event.type == sf::Event::TextEntered)
@@ -75,11 +80,24 @@ void graphics::TextField::handleEvent(const sf::Event& event)
 			if (event.text.unicode == '\b')
 			{
 				if (!_inputString.empty())
+				{
 					_inputString.pop_back();
+					_text.setString(_inputString);
+					_keyRepeatClock.restart();
+				}
 			}
-			else if (_inputString.size() < _maxLength)
+			else if (event.text.unicode >= 32 && event.text.unicode < 128 &&
+				_inputString.size() < _maxLength)
 			{
-				_inputString += static_cast<char>(event.text.unicode);
+				if (_keyRepeatClock.getElapsedTime().asMilliseconds() > 400)
+				{
+					_inputString += static_cast<char>(event.text.unicode);
+					_text.setString(_inputString);
+
+					if (_keyRepeatClock.getElapsedTime().asMilliseconds() > 500) {
+						_keyRepeatClock.restart();
+					}
+				}
 			}
 
 			_text.setString(_inputString);
