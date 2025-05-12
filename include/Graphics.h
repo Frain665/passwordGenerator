@@ -12,6 +12,7 @@
 #include <SFML/Graphics/Sprite.hpp>
 #include <SFML/Graphics/Texture.hpp>
 #include <SFML/Graphics/RectangleShape.hpp>
+#include <SFML/Graphics/Font.hpp>
 #include <SFML/System/Vector2.hpp>
 #include <SFML/Window/Event.hpp>
 
@@ -81,6 +82,7 @@ namespace graphics
 		bool isClicked(const sf::Event& event) const;
 		void setPosition(const sf::Vector2f& position);
 		void setEnabled(bool enabled);
+		sf::RectangleShape& getShape();
 		void render(sf::RenderTarget& target) const;
 		void update(const sf::RenderWindow& window);
 	};

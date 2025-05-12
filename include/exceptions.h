@@ -5,7 +5,7 @@
 #include <string>
 
 //--------------------------------------------------------------
-//	Base classs
+//	Base class
 //--------------------------------------------------------------
 
 class BaseException : public std::exception

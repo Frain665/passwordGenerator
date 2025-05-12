@@ -1,4 +1,5 @@
 #include "Graphics.h"
+#include <exceptions.h>
 
 graphics::TextField::TextField()
 	: _isActive(false),
@@ -7,9 +8,9 @@ graphics::TextField::TextField()
 	_inactiveColor(sf::Color(180, 180, 180)),
 	_maxLength(20)
 {
-	if (!_font.loadFromFile("PathToFont"))
+	if (!_font.loadFromFile("resources/fonts/defaultFont.otf"))
 	{
-		std::cerr << "Failed to load font using the PathToFont path" << std::endl;
+		throw FontException("resources/fonts/defaultFont.otf");
 	}
 
 	_text.setFont(_font);
@@ -125,6 +126,11 @@ void graphics::Button::setPosition(const sf::Vector2f& position)
 void graphics::Button::setEnabled(bool enabled)
 {
 	_state = enabled ? ButtonState::NORMAL : ButtonState::DISABLED;
+}
+
+sf::RectangleShape& graphics::Button::getShape()
+{
+	return _shape;
 }
 
 void graphics::Button::render(sf::RenderTarget& target) const
