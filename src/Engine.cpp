@@ -6,7 +6,7 @@ void Engine::initVariables()
 	_windowTitle = "Password Generator";
 	_window = nullptr;
 	_event = {};
-	
+
 }
 
 void Engine::uploadResources()
@@ -18,22 +18,24 @@ void Engine::uploadResources()
 
 	DefaultButtonFactory defaultButtonFactory(_font);
 
-	auto startButton = defaultButtonFactory.createButton("Generate", { 300, 100 });
+	auto startButton = defaultButtonFactory.createButton("Generate", { 200, 50 });
 
 	_buttons.push_back(std::move(startButton));
 
-	AnchoredElement anchor(
-		AnchorHorizontal::RIGHT,
-		AnchorVertical::BOTTOM,
-		{ -20, -20 },
-		{ 100, 50 },
-		[&startButton](const sf::Vector2f& pos, const sf::Vector2f& size) {
-			startButton->getShape().setPosition(pos);
-			startButton->getShape().setSize(size);
-		}
-	);
+	size_t buttonIndex = _buttons.size() - 1;
 
-	_anchor = anchor;
+	_anchor.emplace(AnchorHorizontal::CENTER,
+		AnchorVertical::BOTTOM,
+		sf::Vector2f(-70, -20),
+		sf::Vector2f(200, 50),
+		[this, buttonIndex](const sf::Vector2f& pos, const sf::Vector2f& size) 
+		{
+			if (buttonIndex < _buttons.size() && _buttons[buttonIndex])
+			{
+				_buttons[buttonIndex]->setPosition(pos);
+				_buttons[buttonIndex]->getShape().setSize(size);
+			}
+		});
 }
 
 void Engine::initWindow()
@@ -76,6 +78,8 @@ void Engine::update()
 {
 	this->handleInput();
 
+	_anchor->update(sf::Vector2u(800, 600));
+
 	for (auto const& button : _buttons)
 	{
 		button->update(*_window);
@@ -111,7 +115,8 @@ void Engine::handleInput()
 			}
 			break;
 		case sf::Event::Resized:
-			_anchor.update(_window->getSize());
+			_anchor->update(_window->getSize());
+			break;
 		default:
 			break;
 		}

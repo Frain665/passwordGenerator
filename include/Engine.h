@@ -2,6 +2,7 @@
 #define ENGINE_HPP
 
 #include <iostream>
+#include <optional>
 #include <memory>
 #include <string>
 #include <vector>
@@ -26,7 +27,7 @@ private:
 	void initVariables();
 	void uploadResources();
 	void initWindow();
-
+	
 	Engine() = default;
 	Engine operator=(const Engine&) = delete;
 	Engine(const Engine&) = delete;
@@ -36,12 +37,10 @@ private:
 	sf::VideoMode _videoMode;
 	std::string _windowTitle;
 
+	std::optional<AnchoredElement> _anchor;
+
 	const std::string _fontPath = RESOURCES_DIR "fonts/defaultFont.otf";
 	sf::Font _font;
-
-	DefaultButtonFactory _defaultButtonFactory;
-
-	AnchoredElement _anchor;
 
 	std::vector<std::unique_ptr<graphics::Button>> _buttons;
 

@@ -133,6 +133,11 @@ sf::RectangleShape& graphics::Button::getShape()
 	return _shape;
 }
 
+ButtonConfig& graphics::Button::getConfig()
+{
+	return _config;
+}
+
 void graphics::Button::render(sf::RenderTarget& target) const
 {
 	target.draw(_shape);

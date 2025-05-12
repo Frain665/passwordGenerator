@@ -83,6 +83,7 @@ namespace graphics
 		void setPosition(const sf::Vector2f& position);
 		void setEnabled(bool enabled);
 		sf::RectangleShape& getShape();
+		ButtonConfig& getConfig();
 		void render(sf::RenderTarget& target) const;
 		void update(const sf::RenderWindow& window);
 	};
