@@ -2,6 +2,7 @@
 #define ENGINE_HPP
 
 #include <iostream>
+#include <random>
 #include <optional>
 #include <memory>
 #include <string>
@@ -37,14 +38,14 @@ private:
 	sf::VideoMode _videoMode;
 	std::string _windowTitle;
 
+	int _passwordLength;
+	std::string _allowedChars;
 	std::optional<AnchoredElement> _anchor;
-
 	const std::string _fontPath = RESOURCES_DIR "fonts/defaultFont.otf";
 	sf::Font _font;
 
 	std::vector<std::unique_ptr<graphics::Button>> _buttons;
-
-	std::shared_ptr<graphics::TextField> _textField;
+	std::shared_ptr <graphics::TextField> _textField;
 
 public:
 	static Engine& getInstance();
@@ -60,6 +61,8 @@ public:
 	void handleInput();
 	void run();
 	void render();
+	void updatingButtons();
+	std::string generateRandomPassword();
 	void update();
 };
 

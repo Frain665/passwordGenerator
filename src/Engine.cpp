@@ -6,7 +6,8 @@ void Engine::initVariables()
 	_windowTitle = "Password Generator";
 	_window = nullptr;
 	_event = {};
-
+	_passwordLength = 12;
+	_allowedChars = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz!@#$%^&*()";
 }
 
 void Engine::uploadResources()
@@ -18,18 +19,19 @@ void Engine::uploadResources()
 
 	DefaultButtonFactory defaultButtonFactory(_font);
 
-	auto startButton = defaultButtonFactory.createButton("Generate", { 200, 50 });
-	_buttons.push_back(std::move(startButton));
+	auto generateButton = defaultButtonFactory.createButton("Generate", { 200, 50 });
+	_buttons.push_back(std::move(generateButton));
 	size_t buttonIndex = _buttons.size() - 1;
 
 	_textField = std::make_shared <graphics::TextField>();
-	_textField->setPosition(sf::Vector2f(300.f, 300.f));
+	_textField->setSize(sf::Vector2f(400.f, 100.f));
+	_textField->setPosition(sf::Vector2f(230.f, 100.f));
 
 	_anchor.emplace(AnchorHorizontal::CENTER,
 		AnchorVertical::BOTTOM,
 		sf::Vector2f(-70, -20),
 		sf::Vector2f(200, 50),
-		[this, buttonIndex](const sf::Vector2f& pos, const sf::Vector2f& size) 
+		[this, buttonIndex](const sf::Vector2f& pos, const sf::Vector2f& size)
 		{
 			if (buttonIndex < _buttons.size() && _buttons[buttonIndex])
 			{
@@ -79,6 +81,7 @@ void Engine::update()
 {
 	this->handleInput();
 	_textField->handleEvent(_event);
+	updatingButtons();
 
 	_anchor->update(sf::Vector2u(800, 600));
 
@@ -100,6 +103,47 @@ void Engine::render()
 	_textField->render(*_window);
 
 	_window->display();
+}
+
+void Engine::updatingButtons()
+{
+	if (_buttons.empty() || !_textField)
+	{
+		return;
+	}
+
+	try
+	{
+		const auto& generateButton = _buttons.at(0);
+
+		if (generateButton->isClicked(_event))
+		{
+			std::string newPassword = generateRandomPassword();
+			_textField->setText(newPassword);
+
+			std::cout << "Generated new password: " << newPassword << std::endl;
+		}
+	}
+	catch (const std::exception& e) {
+		std::cerr << "Error in updatingButtons: " << e.what() << std::endl;
+	}
+
+}
+
+std::string Engine::generateRandomPassword()
+{
+	std::random_device rd;
+	std::mt19937 generator(rd());
+	std::uniform_int_distribution<> distr(0, _allowedChars.size() - 1);
+
+	std::string password;
+	password.reserve(_passwordLength);
+
+	for (int i = 0; i < _passwordLength; ++i) {
+		password += _allowedChars[distr(generator)];
+	}
+
+	return password;
 }
 
 void Engine::handleInput()

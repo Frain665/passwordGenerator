@@ -35,15 +35,20 @@ const std::string& graphics::TextField::getText() const
 	return _inputString;
 }
 
-void graphics::TextField::setCharacterSize(unsigned int characterSize) 
+void graphics::TextField::setCharacterSize(unsigned int characterSize)
 {
 	_characterSize = characterSize;
 	_text.setCharacterSize(characterSize);
 }
 
-void graphics::TextField::setSize(float width, float height)
+void graphics::TextField::setSize(const float& width, const float& height)
 {
 	_background.setSize(sf::Vector2f(width, height));
+}
+
+void graphics::TextField::setSize(const sf::Vector2f& size)
+{
+	_background.setSize(size);
 }
 
 void graphics::TextField::setMaxLength(unsigned int length)
@@ -89,12 +94,12 @@ void graphics::TextField::handleEvent(const sf::Event& event)
 			else if (event.text.unicode >= 32 && event.text.unicode < 128 &&
 				_inputString.size() < _maxLength)
 			{
-				if (_keyRepeatClock.getElapsedTime().asMilliseconds() > 400)
+				if (_keyRepeatClock.getElapsedTime().asMilliseconds() > 100)
 				{
 					_inputString += static_cast<char>(event.text.unicode);
 					_text.setString(_inputString);
 
-					if (_keyRepeatClock.getElapsedTime().asMilliseconds() > 500) {
+					if (_keyRepeatClock.getElapsedTime().asMilliseconds() > 100) {
 						_keyRepeatClock.restart();
 					}
 				}
@@ -128,7 +133,7 @@ graphics::Button::Button(const ButtonConfig& config)
 
 bool graphics::Button::isClicked(const sf::Event& event) const
 {
-	return false;
+	return (_wasPressed && _clickTimer.getElapsedTime().asSeconds() >= _clickDelay);
 }
 
 void graphics::Button::setPosition(const sf::Vector2f& position)
@@ -166,6 +171,8 @@ void graphics::Button::update(const sf::RenderWindow& window)
 {
 	if (_state == ButtonState::DISABLED) return;
 
+	bool clickAllowed = (_clickTimer.getElapsedTime().asSeconds() >= _clickDelay);
+
 	auto mousePos = sf::Mouse::getPosition(window);
 	bool contains = _shape.getGlobalBounds().contains(
 		static_cast<float>(mousePos.x),
@@ -181,19 +188,29 @@ void graphics::Button::update(const sf::RenderWindow& window)
 		}
 		else
 		{
-			_state = _wasPressed ? ButtonState::PRESSED : ButtonState::HOVERED;
+			if (_wasPressed && clickAllowed)
+			{
+				if (_config.onClickAction)
+					_config.onClickAction();
+				_wasPressed = false;
+				_clickTimer.restart();
+			}
+			_state = ButtonState::HOVERED;
 		}
 
 		if (!sf::Mouse::isButtonPressed(sf::Mouse::Left) && _wasPressed)
 		{
-			if (_config.onClickAction) _config.onClickAction();
+			if (_config.onClickAction)
+				_config.onClickAction();
 			_wasPressed = false;
 		}
 	}
 	else
 	{
 		_state = ButtonState::NORMAL;
+
 		_wasPressed = false;
+
 	}
 
 	switch (_state)

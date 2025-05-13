@@ -21,7 +21,7 @@
 // the buttons 
 // in the interface
 
-enum class ButtonState {NORMAL, HOVERED, PRESSED, DISABLED };
+enum class ButtonState { NORMAL, HOVERED, PRESSED, DISABLED };
 
 struct ButtonConfig
 {
@@ -75,6 +75,8 @@ namespace graphics
 		ButtonConfig _config;
 		ButtonState _state = ButtonState::NORMAL;
 		bool _wasPressed = false;
+		sf::Clock _clickTimer;
+		float _clickDelay = 0.9f;
 
 	public:
 		explicit Button(const ButtonConfig& config);
@@ -90,16 +92,16 @@ namespace graphics
 
 	class TextField
 	{
-	/*
-				*Improvements for the future:
-			1. Add placeholder text
-			
-			2. Implement text selection
-			
-			3. Add multiline input support
-			
-			4. Optimize event handling
-	*/
+		/*
+					*Improvements for the future:
+				1. Add placeholder text
+
+				2. Implement text selection
+
+				3. Add multiline input support
+
+				4. Optimize event handling
+		*/
 
 	private:
 		sf::Clock _keyRepeatClock;
@@ -123,7 +125,8 @@ namespace graphics
 		const std::string& getText() const;
 
 		void setCharacterSize(unsigned int characterSize);
-		void setSize(float width, float height);
+		void setSize(const float& width, const float& height);
+		void setSize(const sf::Vector2f& size);
 		void setMaxLength(unsigned int length);
 		void setText(const std::string& text);
 		void setPosition(sf::Vector2f position);
